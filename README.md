@@ -16,8 +16,8 @@ Especially initially, when there multiple issues with code, changing in one loca
 
 I got over it by starting to log particles each step to the file and seeing intermediate results.
 
-## Importance of noise 
-In this assignment it was very important to add noise for the measurements. 
+## Importance of noise
+In this assignment it was very important to add noise for the measurements.
 Uncertainty allows more particles to survive, and more importantly it allows to survive particles which are at the correct locations.
 If there are particle with high confidence at the wrong location, then without uncertainly it quickly draws particles around that location and is not able to recover.
 
@@ -25,3 +25,12 @@ If there are particle with high confidence at the wrong location, then without u
 If the mean weighted error got over ~0.1 in x or y direction, it was almost impossible to recover.
 In case of such situation in the real life it would be reccomended to re-initialize from GPS or other source of localization.
 Or as an alternative to re-initialize particles with much larger uncertainty to allow recovery.
+
+## Visualization
+Created tool in order to make visualization:
+https://github.com/Valtgun/Visualization-Kidnapped-Vehicle-Project
+
+Map of landmarks:
+
+
+Zoomed in view of particles around location:
