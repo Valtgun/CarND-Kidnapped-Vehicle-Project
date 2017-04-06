@@ -18,7 +18,7 @@ using namespace std;
 
 
 int main() {
-    bool dump_particle_info = false;
+  bool dump_particle_info = false;
 	// parameters related to grading.
 	int time_steps_before_lock_required = 100; // number of time steps before accuracy is checked by grader.
   //int time_steps_before_lock_required = 2; // number of time steps before accuracy is checked by grader.
@@ -100,7 +100,7 @@ int main() {
 			// Predict the vehicle's next state (noiseless).
 			pf.prediction(delta_t, sigma_pos, position_meas[i-1].velocity, position_meas[i-1].yawrate);
 		}
-        
+
 		// simulate the addition of noise to noiseless observation data.
 		vector<LandmarkObs> noisy_observations;
 		LandmarkObs obs;

@@ -126,7 +126,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
     double px = tPart.x;
     double py = tPart.y;
     double ptheta = tPart.theta;
-   
+
     for (int j = 0; j<map_landmarks.landmark_list.size(); j++)
     {
       Map::single_landmark_s temp_landmark_input = map_landmarks.landmark_list[j];
@@ -142,7 +142,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
     }
 
     std::sort(transfered_map_landmarks.begin(), transfered_map_landmarks.end());
-    
+
 //    ParticleFilter::dataAssociation(transfered_map_landmarks, observations);
 
     long double weight = 1.0;
@@ -174,7 +174,7 @@ void ParticleFilter::resample() {
 	// NOTE: You may find std::discrete_distribution helpful here.
 	//   http://en.cppreference.com/w/cpp/numeric/random/discrete_distribution
   std::vector<Particle> new_particles;
-  
+
   double max_weight = *max_element(begin(weights), end(weights));
 
   std::random_device rd;
@@ -199,12 +199,12 @@ void ParticleFilter::resample() {
       idx = (idx+1)%num_particles;
     }
     Particle particle;
-    //particle.x = particles[idx].x+dx(gen);
-    //particle.y = particles[idx].y+dy(gen);
-    //particle.theta = particles[idx].theta+dtheta(gen);
-    particle.x = particles[idx].x;
-    particle.y = particles[idx].y;
-    particle.theta = particles[idx].theta;
+    particle.x = particles[idx].x+dx(gen);
+    particle.y = particles[idx].y+dy(gen);
+    particle.theta = particles[idx].theta+dtheta(gen);
+    //particle.x = particles[idx].x;
+    //particle.y = particles[idx].y;
+    //particle.theta = particles[idx].theta;
 
     particle.weight = particles[idx].weight;
     new_particles.push_back(particle);
