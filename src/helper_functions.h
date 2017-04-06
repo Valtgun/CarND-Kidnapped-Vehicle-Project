@@ -41,6 +41,12 @@ struct LandmarkObs {
 	int id;				// Id of matching landmark in the map.
 	double x;			// Local (vehicle coordinates) x position of landmark observation [m]
 	double y;			// Local (vehicle coordinates) y position of landmark observation [m]
+    
+    // Add sorting operator
+    bool operator < (const LandmarkObs& other) const 
+    {
+		return (sqrt(x*x + y*y) < sqrt(other.x*other.x + other.y*other.y));
+	}
 };
 
 /*

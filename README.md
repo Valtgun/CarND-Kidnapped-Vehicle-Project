@@ -1,112 +1,27 @@
-# Overview
-This repository contains all the code needed to complete the final project for the Localization course in Udacity's Self-Driving Car Nanodegree.
+# Summary
+This repository contains the code for the project for the Localization course in Udacity's Self-Driving Car Nanodegree.
 
-#### Submission
-All you will submit is your completed version of `particle_filter.cpp`, which is located in the `src` directory. You should probably do a `git pull` before submitting to verify that your project passes the most up-to-date version of the grading code (there are some parameters in `src/main.cpp` which govern the requirements on accuracy and run time.)
+## Overview
+This was one of the most challenging coding assignments, because it was harder to find the cause of the issue if there were such occurences.
+Some of the main challenges are described below:
 
-## Project Introduction
-In this project you will implement a 2 dimensional particle filter in C++. Your particle filter will be given a map and some initial localization information (analogous to what a GPS would provide). At each time step your filter will also get observation and control data. 
+## Coordinate space
+This was one of the confusing aspects of the assignment.
+It is stated that map coordinates are X = Right and Y = Down, in the lectures local car space is X = forward, Y = left.
+Whereas in this task Readme it stated that Y positive = forward and X = right, essentially meaning 90 degree rotated axes.
 
-## Running the Code
-Once you have this repository on your machine, `cd` into the repository's root directory and run the following commands from the command line:
+## Debugging inaccurate results
+There were few causes of inaccurate resutls, and with current outputs it was hard to understand whch part of the code is failing.
+Especially initially, when there multiple issues with code, changing in one location to the correct solution gave worse overall error results, thus misleading about the possible fix.
 
-```
-> ./clean.sh
-> ./build.sh
-> ./run.sh
-```
+I got over it by starting to log particles each step to the file and seeing intermediate results.
 
-> **NOTE**
-> If you get any `command not found` problems, you will have to install 
-> the associated dependencies (for example, 
-> [cmake](https://cmake.org/install/))
+## Importance of noise 
+In this assignment it was very important to add noise for the measurements. 
+Uncertainty allows more particles to survive, and more importantly it allows to survive particles which are at the correct locations.
+If there are particle with high confidence at the wrong location, then without uncertainly it quickly draws particles around that location and is not able to recover.
 
-If everything worked you should see something like the following output:
-
-```
-.
-.
-.
-Time step: 2444
-Cumulative mean weighted error: x 0 y 0 yaw 0
-Runtime (sec): 0.187226
-This is the starter code. You haven't initialized your filter.
-```
-
-Your job is to build out the methods in `particle_filter.cpp` until the last line of output says:
-
-```
-Success! Your particle filter passed!
-```
-
-# Implementing the Particle Filter
-The directory structure of this repository is as follows:
-
-```
-root
-|   build.sh
-|   clean.sh
-|   CMakeLists.txt
-|   README.md
-|   run.sh
-|
-|___data
-|   |   control_data.txt
-|   |   gt_data.txt
-|   |   map_data.txt
-|   |
-|   |___observation
-|       |   observations_000001.txt
-|       |   ... 
-|       |   observations_002444.txt
-|   
-|___src
-    |   helper_functions.h
-    |   main.cpp
-    |   map.h
-    |   particle_filter.cpp
-    |   particle_filter.h
-```
-
-The only file you should modify is `particle_filter.cpp` in the `src` directory. The file contains the scaffolding of a `ParticleFilter` class and some associated methods. Read through the code, the comments, and the header file `particle_filter.h` to get a sense for what this code is expected to do.
-
-If you are interested, take a look at `src/main.cpp` as well. This file contains the code that will actually be running your particle filter and calling the associated methods.
-
-## Inputs to the Particle Filter
-You can find the inputs to the particle filter in the `data` directory. 
-
-#### The Map*
-`map_data.txt` includes the position of landmarks (in meters) on an arbitrary Cartesian coordinate system. Each row has three columns
-1. x position
-2. y position
-3. landmark id
-
-> * Map data provided by 3D Mapping Solutions GmbH.
-
-
-#### Control Data
-`control_data.txt` contains rows of control data. Each row corresponds to the control data for the corresponding time step. The two columns represent
-1. vehicle speed (in meters per second)
-2. vehicle yaw rate (in radians per second)
-
-#### Observation Data
-The `observation` directory includes around 2000 files. Each file is numbered according to the timestep in which that observation takes place. 
-
-These files contain observation data for all "observable" landmarks. Here observable means the landmark is sufficiently close to the vehicle. Each row in these files corresponds to a single landmark. The two columns represent:
-1. x distance to the landmark in meters (right is positive) RELATIVE TO THE VEHICLE. 
-2. y distance to the landmark in meters (forward is positive) RELATIVE TO THE VEHICLE.
-
-> **NOTE**
-> The vehicle's coordinate system is NOT the map coordinate system. Your 
-> code will have to handle this transformation.
-
-## Success Criteria
-If your particle filter passes the current grading code (you can make sure you have the current version at any time by doing a `git pull`), then you should pass! 
-
-The two things the grading code is looking for are:
-
-1. **Accuracy**: your particle filter should localize vehicle position and yaw to within the values specified in the parameters `max_translation_error` and `max_yaw_error` in `src/main.cpp`.
-2. **Performance**: your particle filter should complete execution within the time specified by `max_runtime` in `src/main.cpp`.
-
-
-
+## Error threshold
+If the mean weighted error got over ~0.1 in x or y direction, it was almost impossible to recover.
+In case of such situation in the real life it would be reccomended to re-initialize from GPS or other source of localization.
+Or as an alternative to re-initialize particles with much larger uncertainty to allow recovery.

@@ -18,7 +18,7 @@ using namespace std;
 
 
 int main() {
-
+    bool dump_particle_info = false;
 	// parameters related to grading.
 	int time_steps_before_lock_required = 100; // number of time steps before accuracy is checked by grader.
   //int time_steps_before_lock_required = 2; // number of time steps before accuracy is checked by grader.
@@ -100,6 +100,7 @@ int main() {
 			// Predict the vehicle's next state (noiseless).
 			pf.prediction(delta_t, sigma_pos, position_meas[i-1].velocity, position_meas[i-1].yawrate);
 		}
+        
 		// simulate the addition of noise to noiseless observation data.
 		vector<LandmarkObs> noisy_observations;
 		LandmarkObs obs;
@@ -111,10 +112,21 @@ int main() {
 			obs.y = obs.y + n_y;
 			noisy_observations.push_back(obs);
 		}
-
+        if (dump_particle_info)
+        {
+            std::ostringstream filename;
+            filename << "out/out_particles_" << setfill('0') << setw(6) << i+1 << "_pred.txt";
+            pf.write(filename.str());
+        }
 		// Update the weights and resample
 		pf.updateWeights(sensor_range, sigma_landmark, noisy_observations, map);
 		pf.resample();
+        if (dump_particle_info)
+        {
+            std::ostringstream filename;
+            filename << "out/out_particles_" << setfill('0') << setw(6) << i+1 << "_res.txt";
+            pf.write(filename.str());
+        }
 
 		// Calculate and output the average weighted error of the particle filter over all time steps so far.
 		vector<Particle> particles = pf.particles;
