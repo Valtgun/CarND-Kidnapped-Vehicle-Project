@@ -31,6 +31,7 @@ Created tool in order to make visualization:
 https://github.com/Valtgun/Visualization-Kidnapped-Vehicle-Project
 
 Map of landmarks:
-
+![Map of landmarks](Map_landmarks_path.png)
 
 Zoomed in view of particles around location:
+![Particles](Particles.png)
